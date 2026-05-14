@@ -17,7 +17,7 @@
     <meta property="og:url" content="https://beaudette.me/">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308141f'/%3E%3Cpath d='M18 45V17h15.5c6.6 0 10.8 3.4 10.8 8.7 0 3.2-1.7 5.9-4.6 7.2 3.7 1.1 5.9 4 5.9 7.8 0 5.7-4.5 9.3-11.7 9.3H18Zm7.2-16h7.2c2.8 0 4.5-1.5 4.5-3.8s-1.7-3.6-4.5-3.6h-7.2V29Zm0 15.4h8.2c3 0 4.8-1.5 4.8-4s-1.8-4-4.8-4h-8.2v8Z' fill='%23f3ecdf'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
-    <meta name="site-version" content="1.2.0">
+    <meta name="site-version" content="1.6.0">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M91PQ3MQFB"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -28,7 +28,7 @@
   </head>
   <body>
     <header class="site-header" id="top">
-      <a class="brand" href="#top" aria-label="Philippe Beaudette home">beaudette.me</a>
+      <a class="brand" href="#top" aria-label="Philippe Beaudette home" id="brand-name">beaudette.me</a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="#profile">Profile</a>
         <a href="#experience">Experience</a>
@@ -40,10 +40,10 @@
     <main>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="section-label">Executive profile</p>
+          <p class="section-label" id="hero-label">Executive profile</p>
           <h1 id="hero-title">Philippe Beaudette</h1>
-          <p class="dek">Community, product, and technology leadership for complex, high-trust systems.</p>
-          <p class="intro">
+          <p class="dek" id="hero-dek">Community, product, and technology leadership for complex, high-trust systems.</p>
+          <p class="intro" id="hero-intro">
             I help organizations build durable communities, clear operating systems, and products that work in the real world.
             My background spans global online communities, civic technology, strategy, trust, and executive operations.
           </p>
@@ -67,22 +67,22 @@
 
       <section class="content-grid" id="profile" aria-labelledby="profile-title">
         <article class="panel large">
-          <p class="section-label">Profile</p>
+          <p class="section-label" id="profile-label">Profile</p>
           <h2 id="profile-title">A practical operator for mission-driven technology.</h2>
-          <p>
+          <p id="profile-body1">
             Philippe works at the intersection of people, product, and institutions. His executive work is grounded in
             the messy reality of large-scale communities: aligning incentives, building trust, making decisions visible,
             and turning complexity into systems teams can actually use.
           </p>
-          <p>
+          <p id="profile-body2">
             This site is a concise home base for background, writing, availability, and current work.
           </p>
         </article>
 
         <article class="panel">
-          <p class="section-label">Now</p>
-          <h2>What I am useful for</h2>
-          <p>
+          <p class="section-label" id="now-label">Now</p>
+          <h2 id="now-title">What I am useful for</h2>
+          <p id="now-body">
             Community strategy, executive problem-solving, product judgment, organizational design, and calm leadership
             in ambiguous environments.
           </p>
@@ -115,24 +115,24 @@
 
       <section class="writing" id="writing" aria-labelledby="writing-title">
         <div>
-          <p class="section-label">Writing</p>
+          <p class="section-label" id="writing-label">Writing</p>
           <h2 id="writing-title">Notes on leadership, communities, and systems.</h2>
         </div>
-        <a class="text-link" href="#contact">Ask about recent writing</a>
+        <a class="text-link" href="#contact" id="writing-link">Ask about recent writing</a>
       </section>
 
       <section class="contact" id="contact" aria-labelledby="contact-title">
         <div>
-          <p class="section-label">Contact</p>
+          <p class="section-label" id="contact-label">Contact</p>
           <h2 id="contact-title">For introductions, advising, and availability.</h2>
-          <p>
+          <p id="contact-body">
             Reach out for a conversation about community strategy, product leadership, or operating through complexity.
           </p>
         </div>
         <div class="contact-actions">
-          <a class="button primary" href="mailto:hello@beaudette.me">hello@beaudette.me</a>
+          <a class="button primary" href="mailto:hello@beaudette.me" id="contact-email">hello@beaudette.me</a>
           <a class="button secondary" href="Calendar/">Calendar</a>
-          <a class="button secondary" href="https://www.linkedin.com/in/philippebeaudette">LinkedIn</a>
+          <a class="button secondary" href="https://www.linkedin.com/in/philippebeaudette" id="contact-linkedin">LinkedIn</a>
         </div>
       </section>
     </main>
@@ -141,5 +141,6 @@
       <p>&copy; 2026 Philippe Beaudette. All rights reserved.</p>
       <a href="#top">Back to top</a>
     </footer>
+    <script src="app.js"></script>
   </body>
 </html>
