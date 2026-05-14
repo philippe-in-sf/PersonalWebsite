@@ -10,6 +10,10 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 - `Calendar/index.html` - matching page for an embedded Google Calendar iframe
 - `styles.css` - dark navy/deep green visual system
 
+## Version
+
+Current site version: `1.2.0` (minor increment for this deployment).
+
 ## Notes
 
 The copy intentionally uses conservative wording around public background. Replace the placeholder contact address or writing links with final destinations before publishing.
