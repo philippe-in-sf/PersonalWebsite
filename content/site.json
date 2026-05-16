@@ -1,0 +1,32 @@
+{
+  "siteName": "beaudette.me",
+  "hero": {
+    "sectionLabel": "Executive profile",
+    "title": "Philippe Beaudette",
+    "dek": "Community, product, and technology leadership for complex, high-trust systems.",
+    "intro": "I help organizations build durable communities, clear operating systems, and products that work in the real world. My background spans global online communities, civic technology, strategy, trust, and executive operations."
+  },
+  "profile": {
+    "sectionLabel": "Profile",
+    "title": "A practical operator for mission-driven technology.",
+    "body1": "Philippe works at the intersection of people, product, and institutions. His executive work is grounded in the messy reality of large-scale communities: aligning incentives, building trust, making decisions visible, and turning complexity into systems teams can actually use.",
+    "body2": "This site is a concise home base for background, writing, availability, and current work."
+  },
+  "now": {
+    "sectionLabel": "Now",
+    "title": "What I am useful for",
+    "body": "Community strategy, executive problem-solving, product judgment, organizational design, and calm leadership in ambiguous environments."
+  },
+  "writing": {
+    "sectionLabel": "Writing",
+    "title": "Notes on leadership, communities, and systems.",
+    "linkText": "Ask about recent writing"
+  },
+  "contact": {
+    "sectionLabel": "Contact",
+    "title": "For introductions, advising, and availability.",
+    "body": "Reach out for a conversation about community strategy, product leadership, or operating through complexity.",
+    "email": "hello@beaudette.me",
+    "linkedinUrl": "https://www.linkedin.com/in/philippebeaudette"
+  }
+}

@@ -1,0 +1,62 @@
+backend:
+  name: git-gateway
+  branch: main
+
+site_url: https://beaudette.me
+display_url: https://beaudette.me
+logo_url: /favicon.ico
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "site"
+    label: "Site Content"
+    files:
+      - file: "content/site.json"
+        label: "Homepage Sections"
+        name: "homepage"
+        format: "json"
+        fields:
+          - label: "Site Name"
+            name: "siteName"
+            widget: "string"
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Section Label", name: "sectionLabel", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Deck", name: "dek", widget: "text" }
+              - { label: "Intro", name: "intro", widget: "text" }
+          - label: "Profile"
+            name: "profile"
+            widget: "object"
+            fields:
+              - { label: "Section Label", name: "sectionLabel", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Body 1", name: "body1", widget: "text" }
+              - { label: "Body 2", name: "body2", widget: "text" }
+          - label: "Now"
+            name: "now"
+            widget: "object"
+            fields:
+              - { label: "Section Label", name: "sectionLabel", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Body", name: "body", widget: "text" }
+          - label: "Writing"
+            name: "writing"
+            widget: "object"
+            fields:
+              - { label: "Section Label", name: "sectionLabel", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Link Text", name: "linkText", widget: "string" }
+          - label: "Contact"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Section Label", name: "sectionLabel", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Body", name: "body", widget: "text" }
+              - { label: "Email", name: "email", widget: "string" }
+              - { label: "LinkedIn URL", name: "linkedinUrl", widget: "string" }
