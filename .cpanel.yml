@@ -1,9 +1,9 @@
 ---
 # Increment the major or minor version on every deployment.
-version: 1.1
+version: 3.0
 
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/$USER/public_html/
+    - export DEPLOYPATH=/home/beauyqoz/public_html/
     - /bin/mkdir -p "$DEPLOYPATH"
-    - /usr/bin/rsync -a --existing ./ "$DEPLOYPATH"
+    - /usr/bin/rsync -a ./ "$DEPLOYPATH"
