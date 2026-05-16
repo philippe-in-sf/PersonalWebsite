@@ -10,10 +10,13 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 - `calendar/index.html` - matching page for an embedded Google Calendar appointment schedule
 - `.htaccess` - redirect from the legacy capitalized calendar URL
 - `styles.css` - dark navy/deep green visual system
+- `content/site.json` - checked-in fallback content
+- `content/cms.js` - hosted CMS connection settings
+- `cms/` - Sanity schema and seed content
 
 ## Version
 
-Current site version: `1.7.0` (minor increment for this deployment).
+Current site version: `1.8.0` (minor increment for the Sanity CMS deployment).
 
 ## Notes
 
@@ -26,22 +29,25 @@ The copy intentionally uses conservative wording around public background. Repla
 
 ## CMS editing workflow
 
-A Decap CMS admin interface is available at `/admin/`.
+The site is wired for Sanity as the hosted CMS. Sanity handles editor authentication, including Google login if enabled for the Sanity organization/project. The public site stays static and reads content from Sanity's Content Lake.
 
-1. Update `admin/config.yml` with your GitHub repo owner/name and default branch.
-2. Configure authentication for your host (for Netlify, enable Identity + Git Gateway).
-3. Edit homepage content from CMS; changes are saved to `content/site.json`.
-4. `app.js` loads `content/site.json` and injects values into the page at runtime.
+1. Create a Sanity project and dataset, usually `production`.
+2. Add `cms/sanity-homepage-schema.js` to the Studio schema types.
+3. Import `cms/homepage.seed.ndjson`, or create a `homepage` document with the `_id` `homepage`.
+4. Update `content/cms.js` with the Sanity project ID and dataset.
+5. Add `https://beaudette.me` and local preview origins to the Sanity CORS settings.
 
+If Sanity is not configured or the request fails, `app.js` falls back to `content/site.json`.
 
-## Authentication status
+## Sanity content model
 
-The `/admin/` panel is **not automatically protected by this repo alone**. Authentication is enforced by your hosting provider integration.
+The homepage document uses this shape:
 
-For Netlify + Decap CMS:
-1. Enable **Netlify Identity**.
-2. Enable **Git Gateway**.
-3. Invite only approved users (Identity > Invite users).
-4. Optionally require registration to be invite-only.
+- `siteName`
+- `hero`: `sectionLabel`, `title`, `dek`, `intro`
+- `profile`: `sectionLabel`, `title`, `body1`, `body2`
+- `now`: `sectionLabel`, `title`, `body`
+- `writing`: `sectionLabel`, `title`, `linkText`
+- `contact`: `sectionLabel`, `title`, `body`, `email`, `linkedinUrl`
 
-With this setup, only authenticated invited users can access CMS write actions.
+The old `/admin/` route now points editors toward Sanity Studio instead of loading Decap CMS.

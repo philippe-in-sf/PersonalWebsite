@@ -4,20 +4,62 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Site CMS</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #06111b;
+        --ink: #f2eadf;
+        --muted: #b7c1b5;
+        --line: rgba(218, 206, 181, 0.2);
+        --green: #8fae74;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        margin: 0;
+        place-items: center;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      main {
+        width: min(100% - 40px, 680px);
+        padding: 40px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.4rem, 8vw, 4.5rem);
+        font-weight: 500;
+        line-height: 0.95;
+      }
+
+      p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--green);
+        font-weight: 800;
+      }
+    </style>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-      <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', (user) => {
-          if (!user) {
-            window.netlifyIdentity.on('login', () => {
-              document.location.href = '/admin/';
-            });
-          }
-        });
-      }
-    </script>
+    <main>
+      <h1>CMS moved to Sanity</h1>
+      <p>
+        The public site now reads homepage content from Sanity when configured, with
+        the local JSON file as a fallback. Use Sanity Studio for editing and access control.
+      </p>
+      <a href="/">Return to site</a>
+    </main>
   </body>
 </html>
