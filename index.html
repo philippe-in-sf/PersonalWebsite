@@ -17,7 +17,7 @@
     <meta property="og:url" content="https://beaudette.me/">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308141f'/%3E%3Cpath d='M18 45V17h15.5c6.6 0 10.8 3.4 10.8 8.7 0 3.2-1.7 5.9-4.6 7.2 3.7 1.1 5.9 4 5.9 7.8 0 5.7-4.5 9.3-11.7 9.3H18Zm7.2-16h7.2c2.8 0 4.5-1.5 4.5-3.8s-1.7-3.6-4.5-3.6h-7.2V29Zm0 15.4h8.2c3 0 4.8-1.5 4.8-4s-1.8-4-4.8-4h-8.2v8Z' fill='%23f3ecdf'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
-    <meta name="site-version" content="1.8.0">
+    <meta name="site-version" content="1.9.0">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M91PQ3MQFB"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -141,7 +141,137 @@
       <p>&copy; 2026 Philippe Beaudette. All rights reserved.</p>
       <a href="#top">Back to top</a>
     </footer>
-    <script src="content/cms.js"></script>
-    <script src="app.js"></script>
+    <script>
+      window.SITE_CMS = {
+        provider: 'sanity',
+        projectId: 'deoliu90',
+        dataset: 'production',
+        apiVersion: '2026-05-16',
+        documentType: 'homepage',
+        documentId: 'homepage',
+      };
+    </script>
+    <script>
+      (function () {
+        const CMS_CONFIG = {
+          provider: 'sanity',
+          projectId: 'deoliu90',
+          dataset: 'production',
+          apiVersion: '2026-05-16',
+          documentType: 'homepage',
+          documentId: 'homepage',
+          ...(window.SITE_CMS || {}),
+        };
+
+        async function loadContent() {
+          const data = await loadSanityContent() || await loadLocalContent();
+
+          if (data) {
+            renderContent(data);
+          }
+        }
+
+        async function loadSanityContent() {
+          if (!isSanityConfigured()) {
+            return null;
+          }
+
+          const query = `*[_type == "${CMS_CONFIG.documentType}" && _id == "${CMS_CONFIG.documentId}"][0]{
+            siteName,
+            hero,
+            profile,
+            now,
+            writing,
+            contact
+          }`;
+          const url = `https://${CMS_CONFIG.projectId}.api.sanity.io/v${CMS_CONFIG.apiVersion}/data/query/${CMS_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+
+          try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) {
+              return null;
+            }
+
+            const data = await response.json();
+            return data.result || null;
+          } catch (error) {
+            console.error('Sanity content load failed:', error);
+            return null;
+          }
+        }
+
+        async function loadLocalContent() {
+          try {
+            const response = await fetch('content/site.json', { cache: 'no-store' });
+            if (!response.ok) {
+              return null;
+            }
+
+            return await response.json();
+          } catch (error) {
+            console.error('Local content load failed:', error);
+            return null;
+          }
+        }
+
+        function renderContent(data) {
+          setText('brand-name', data.siteName);
+
+          setText('hero-label', data.hero?.sectionLabel);
+          setText('hero-title', data.hero?.title);
+          setText('hero-dek', data.hero?.dek);
+          setText('hero-intro', data.hero?.intro);
+
+          setText('profile-label', data.profile?.sectionLabel);
+          setText('profile-title', data.profile?.title);
+          setText('profile-body1', data.profile?.body1);
+          setText('profile-body2', data.profile?.body2);
+
+          setText('now-label', data.now?.sectionLabel);
+          setText('now-title', data.now?.title);
+          setText('now-body', data.now?.body);
+
+          setText('writing-label', data.writing?.sectionLabel);
+          setText('writing-title', data.writing?.title);
+          setText('writing-link', data.writing?.linkText);
+
+          setText('contact-label', data.contact?.sectionLabel);
+          setText('contact-title', data.contact?.title);
+          setText('contact-body', data.contact?.body);
+          setText('contact-email', data.contact?.email);
+          setHref('contact-email', `mailto:${data.contact?.email || ''}`);
+          setHref('contact-linkedin', data.contact?.linkedinUrl);
+        }
+
+        function isSanityConfigured() {
+          return CMS_CONFIG.provider === 'sanity' &&
+            typeof CMS_CONFIG.projectId === 'string' &&
+            CMS_CONFIG.projectId.length > 0 &&
+            CMS_CONFIG.projectId !== 'your-project-id';
+        }
+
+        function setText(id, value) {
+          if (typeof value !== 'string') {
+            return;
+          }
+          const el = document.getElementById(id);
+          if (el) {
+            el.textContent = value;
+          }
+        }
+
+        function setHref(id, value) {
+          if (typeof value !== 'string' || value.length === 0) {
+            return;
+          }
+          const el = document.getElementById(id);
+          if (el) {
+            el.setAttribute('href', value);
+          }
+        }
+
+        loadContent();
+      })();
+    </script>
   </body>
 </html>

@@ -11,12 +11,12 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 - `.htaccess` - redirect from the legacy capitalized calendar URL
 - `styles.css` - dark navy/deep green visual system
 - `content/site.json` - checked-in fallback content
-- `content/cms.js` - hosted CMS connection settings
+- `content/cms.js` - hosted CMS connection settings fallback
 - `cms/` - Sanity schema and seed content
 
 ## Version
 
-Current site version: `1.8.0` (minor increment for the Sanity CMS deployment).
+Current site version: `1.9.0` (minor increment for the inline Sanity loader deployment).
 
 ## Notes
 
@@ -34,10 +34,10 @@ The site is wired for Sanity as the hosted CMS. Sanity handles editor authentica
 1. Create a Sanity project and dataset, usually `production`.
 2. Add `cms/sanity-homepage-schema.js` to the Studio schema types.
 3. Import `cms/homepage.seed.ndjson`, or create a `homepage` document with the `_id` `homepage`.
-4. Update `content/cms.js` with the Sanity project ID and dataset.
+4. Update the inline `window.SITE_CMS` block in `index.html` with the Sanity project ID and dataset. Keep `app.js` and `content/cms.js` in sync as fallback/reference files.
 5. Add `https://beaudette.me` and local preview origins to the Sanity CORS settings.
 
-If Sanity is not configured or the request fails, `app.js` falls back to `content/site.json`.
+If Sanity is not configured or the request fails, the inline loader falls back to `content/site.json`.
 
 ## Sanity content model
 

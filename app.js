@@ -1,7 +1,7 @@
 (function () {
   const CMS_CONFIG = {
     provider: 'sanity',
-    projectId: '',
+    projectId: 'deoliu90',
     dataset: 'production',
     apiVersion: '2026-05-16',
     documentType: 'homepage',

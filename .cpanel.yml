@@ -1,6 +1,6 @@
 ---
 # Increment the major or minor version on every deployment.
-version: 3.1
+version: 3.2
 
 deployment:
   tasks:
