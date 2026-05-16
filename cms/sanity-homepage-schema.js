@@ -99,6 +99,54 @@ export const homepage = defineType({
           type: 'string',
           validation: (rule) => rule.required(),
         }),
+        defineField({
+          name: 'articles',
+          title: 'Articles',
+          type: 'array',
+          of: [
+            defineField({
+              name: 'article',
+              title: 'Article',
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: 'Title',
+                  type: 'string',
+                  validation: (rule) => rule.required(),
+                }),
+                defineField({
+                  name: 'summary',
+                  title: 'Summary',
+                  type: 'text',
+                  rows: 3,
+                }),
+                defineField({
+                  name: 'url',
+                  title: 'URL',
+                  type: 'url',
+                  validation: (rule) => rule.required(),
+                }),
+                defineField({
+                  name: 'publication',
+                  title: 'Publication',
+                  type: 'string',
+                }),
+                defineField({
+                  name: 'publishedOn',
+                  title: 'Published on',
+                  type: 'date',
+                }),
+              ],
+              preview: {
+                select: {
+                  title: 'title',
+                  subtitle: 'publication',
+                },
+              },
+            }),
+          ],
+        }),
       ],
     }),
     defineField({

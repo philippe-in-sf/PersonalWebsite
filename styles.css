@@ -354,6 +354,46 @@ h3 {
   padding: clamp(28px, 4vw, 48px);
 }
 
+.writing-list-preview {
+  margin-bottom: 40px;
+}
+
+.writing-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.writing-card {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.writing-card h3 {
+  min-height: 64px;
+}
+
+.writing-card p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.writing-meta {
+  margin-bottom: 14px;
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.writing-archive {
+  margin-bottom: 44px;
+}
+
 .calendar-section {
   padding: 0 0 clamp(42px, 7vw, 86px);
 }
@@ -425,6 +465,7 @@ h3 {
 
   .hero,
   .content-grid,
+  .writing-cards,
   .writing,
   .contact {
     grid-template-columns: 1fr;

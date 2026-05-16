@@ -32,7 +32,7 @@
       <nav class="nav" aria-label="Primary navigation">
         <a href="#profile">Profile</a>
         <a href="#experience">Experience</a>
-        <a href="#writing">Writing</a>
+        <a href="writing/">Writing</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
@@ -118,7 +118,17 @@
           <p class="section-label" id="writing-label">Writing</p>
           <h2 id="writing-title">Notes on leadership, communities, and systems.</h2>
         </div>
-        <a class="text-link" href="#contact" id="writing-link">Ask about recent writing</a>
+        <a class="text-link" href="writing/" id="writing-link">Browse all writing</a>
+      </section>
+
+      <section class="writing-list-preview" aria-label="Recent writing">
+        <div class="writing-cards" id="writing-preview-list">
+          <article class="writing-card">
+            <h3>Designing Calm Operating Systems</h3>
+            <p>How leadership teams can reduce decision thrash by making ownership and escalation paths explicit.</p>
+            <a class="text-link" href="https://example.com/designing-calm-operating-systems" target="_blank" rel="noreferrer">Read article</a>
+          </article>
+        </div>
       </section>
 
       <section class="contact" id="contact" aria-labelledby="contact-title">
@@ -182,6 +192,7 @@
             profile,
             now,
             writing,
+            "writingArticles": writing.articles,
             contact
           }`;
           const url = `https://${CMS_CONFIG.projectId}.api.sanity.io/v${CMS_CONFIG.apiVersion}/data/query/${CMS_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
@@ -234,6 +245,8 @@
           setText('writing-label', data.writing?.sectionLabel);
           setText('writing-title', data.writing?.title);
           setText('writing-link', data.writing?.linkText);
+          setHref('writing-link', 'writing/');
+          renderWritingPreview(data.writing?.articles || data.writingArticles || []);
 
           setText('contact-label', data.contact?.sectionLabel);
           setText('contact-title', data.contact?.title);
@@ -268,6 +281,44 @@
           if (el) {
             el.setAttribute('href', value);
           }
+        }
+
+        function renderWritingPreview(articles) {
+          const container = document.getElementById('writing-preview-list');
+          if (!container || !Array.isArray(articles) || articles.length === 0) {
+            return;
+          }
+
+          const topArticles = articles.slice(0, 3);
+          container.innerHTML = topArticles.map((article) => {
+            const title = escapeHtml(article.title || 'Untitled');
+            const summary = escapeHtml(article.summary || '');
+            const publication = escapeHtml(article.publication || '');
+            const publishedOn = escapeHtml(article.publishedOn || '');
+            const url = typeof article.url === 'string' && article.url.length > 0 ? article.url : '#';
+            const meta = [publication, publishedOn].filter(Boolean).join(' · ');
+            return `
+              <article class="writing-card">
+                <p class="writing-meta">${escapeHtml(meta)}</p>
+                <h3>${title}</h3>
+                <p>${summary}</p>
+                <a class="text-link" href="${escapeAttr(url)}" target="_blank" rel="noreferrer">Read article</a>
+              </article>
+            `;
+          }).join('');
+        }
+
+        function escapeHtml(value) {
+          return String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+        }
+
+        function escapeAttr(value) {
+          return escapeHtml(value);
         }
 
         loadContent();
