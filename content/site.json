@@ -20,7 +20,30 @@
   "writing": {
     "sectionLabel": "Writing",
     "title": "Notes on leadership, communities, and systems.",
-    "linkText": "Ask about recent writing"
+    "linkText": "Browse all writing",
+    "articles": [
+      {
+        "title": "Designing Calm Operating Systems",
+        "summary": "How leadership teams can reduce decision thrash by making ownership and escalation paths explicit.",
+        "url": "https://example.com/designing-calm-operating-systems",
+        "publishedOn": "2026-04-11",
+        "publication": "Personal Notes"
+      },
+      {
+        "title": "Trust Signals in Online Communities",
+        "summary": "A practical framework for governance signals that improve participation quality in large communities.",
+        "url": "https://example.com/trust-signals-online-communities",
+        "publishedOn": "2026-02-02",
+        "publication": "Community Systems Journal"
+      },
+      {
+        "title": "Leadership in Ambiguous Systems",
+        "summary": "A field guide to executive communication when the right move is not obvious and the stakes are high.",
+        "url": "https://example.com/leadership-in-ambiguous-systems",
+        "publishedOn": "2025-12-09",
+        "publication": "Public-Interest Technology Review"
+      }
+    ]
   },
   "contact": {
     "sectionLabel": "Contact",

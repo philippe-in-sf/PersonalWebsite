@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Writing | Philippe Beaudette</title>
+    <meta
+      name="description"
+      content="Articles and notes by Philippe Beaudette on leadership, communities, and systems."
+    >
+    <link rel="stylesheet" href="../styles.css">
+    <meta name="site-version" content="1.9.0">
+  </head>
+  <body>
+    <header class="site-header" id="top">
+      <a class="brand" href="../" aria-label="Philippe Beaudette home" id="brand-name">beaudette.me</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="../#profile">Profile</a>
+        <a href="../#experience">Experience</a>
+        <a href="./">Writing</a>
+        <a href="../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero compact writing-hero" aria-labelledby="writing-page-title">
+        <div class="hero-copy">
+          <p class="section-label" id="writing-page-label">Writing</p>
+          <h1 id="writing-page-title">Articles and Notes</h1>
+          <p class="intro" id="writing-page-intro">
+            Essays on leadership, community strategy, and practical systems design.
+          </p>
+        </div>
+      </section>
+
+      <section class="writing-archive" aria-label="Writing archive">
+        <div class="writing-cards" id="writing-archive-list">
+          <article class="writing-card">
+            <p class="writing-meta">Personal Notes · 2026-04-11</p>
+            <h3>Designing Calm Operating Systems</h3>
+            <p>How leadership teams can reduce decision thrash by making ownership and escalation paths explicit.</p>
+            <a class="text-link" href="https://example.com/designing-calm-operating-systems" target="_blank" rel="noreferrer">Read article</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 Philippe Beaudette. All rights reserved.</p>
+      <a href="../">Back to homepage</a>
+    </footer>
+
+    <script>
+      window.SITE_CMS = {
+        provider: 'sanity',
+        projectId: 'deoliu90',
+        dataset: 'production',
+        apiVersion: '2026-05-16',
+        documentType: 'homepage',
+        documentId: 'homepage',
+      };
+    </script>
+    <script>
+      (function () {
+        const CMS_CONFIG = {
+          provider: 'sanity',
+          projectId: 'deoliu90',
+          dataset: 'production',
+          apiVersion: '2026-05-16',
+          documentType: 'homepage',
+          documentId: 'homepage',
+          ...(window.SITE_CMS || {}),
+        };
+
+        async function loadWriting() {
+          const data = await loadSanityContent() || await loadLocalContent();
+          if (!data) {
+            return;
+          }
+
+          setText('brand-name', data.siteName);
+          setText('writing-page-label', data.writing?.sectionLabel);
+          setText('writing-page-title', data.writing?.title || 'Articles and Notes');
+          renderWritingArchive(data.writing?.articles || []);
+        }
+
+        async function loadSanityContent() {
+          if (!isSanityConfigured()) {
+            return null;
+          }
+
+          const query = `*[_type == "${CMS_CONFIG.documentType}" && _id == "${CMS_CONFIG.documentId}"][0]{
+            siteName,
+            writing,
+            "writingArticles": writing.articles
+          }`;
+          const url = `https://${CMS_CONFIG.projectId}.api.sanity.io/v${CMS_CONFIG.apiVersion}/data/query/${CMS_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
+
+          try {
+            const response = await fetch(url, { cache: 'no-store' });
+            if (!response.ok) {
+              return null;
+            }
+            const payload = await response.json();
+            return payload.result || null;
+          } catch (error) {
+            console.error('Sanity content load failed:', error);
+            return null;
+          }
+        }
+
+        async function loadLocalContent() {
+          try {
+            const response = await fetch('../content/site.json', { cache: 'no-store' });
+            if (!response.ok) {
+              return null;
+            }
+            return await response.json();
+          } catch (error) {
+            console.error('Local content load failed:', error);
+            return null;
+          }
+        }
+
+        function renderWritingArchive(articles) {
+          const container = document.getElementById('writing-archive-list');
+          if (!container || !Array.isArray(articles) || articles.length === 0) {
+            return;
+          }
+
+          container.innerHTML = articles.map((article) => {
+            const title = escapeHtml(article.title || 'Untitled');
+            const summary = escapeHtml(article.summary || '');
+            const publication = escapeHtml(article.publication || '');
+            const publishedOn = escapeHtml(article.publishedOn || '');
+            const url = typeof article.url === 'string' && article.url.length > 0 ? article.url : '#';
+            const meta = [publication, publishedOn].filter(Boolean).join(' · ');
+            return `
+              <article class="writing-card">
+                <p class="writing-meta">${escapeHtml(meta)}</p>
+                <h3>${title}</h3>
+                <p>${summary}</p>
+                <a class="text-link" href="${escapeAttr(url)}" target="_blank" rel="noreferrer">Read article</a>
+              </article>
+            `;
+          }).join('');
+        }
+
+        function isSanityConfigured() {
+          return CMS_CONFIG.provider === 'sanity' &&
+            typeof CMS_CONFIG.projectId === 'string' &&
+            CMS_CONFIG.projectId.length > 0 &&
+            CMS_CONFIG.projectId !== 'your-project-id';
+        }
+
+        function setText(id, value) {
+          if (typeof value !== 'string') {
+            return;
+          }
+          const el = document.getElementById(id);
+          if (el) {
+            el.textContent = value;
+          }
+        }
+
+        function escapeHtml(value) {
+          return String(value)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+        }
+
+        function escapeAttr(value) {
+          return escapeHtml(value);
+        }
+
+        loadWriting();
+      })();
+    </script>
+  </body>
+</html>
