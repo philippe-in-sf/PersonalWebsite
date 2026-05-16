@@ -7,7 +7,8 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 ## Structure
 
 - `index.html` - single-page executive profile
-- `Calendar/index.html` - matching page for an embedded Google Calendar iframe
+- `calendar/index.html` - matching page for an embedded Google Calendar appointment schedule
+- `.htaccess` - redirect from the legacy capitalized calendar URL
 - `styles.css` - dark navy/deep green visual system
 
 ## Notes
@@ -16,4 +17,4 @@ The copy intentionally uses conservative wording around public background. Repla
 
 ## Calendar embed
 
-`Calendar/index.html` embeds the Google Appointment Schedule URL and includes a direct fallback link. Google may block third-party iframe rendering for some appointment pages with `x-frame-options: SAMEORIGIN`; the fallback link covers that case.
+`calendar/index.html` embeds the Google Appointment Schedule URL with Google's appointment-schedule iframe path and includes a direct fallback link. The Apache redirect keeps the legacy capitalized `/Calendar/` URL pointed at `/calendar/`.
