@@ -1,5 +1,11 @@
 # Deployment Audit
 
+## 2026-10-11 - 1.11.0 / cache refresh
+
+- Versioned public-page stylesheet and SVG artwork URLs to bypass cached pre-branding assets.
+- Added HTML revalidation (`Cache-Control: no-cache`) to the beaudette.me Apache HTTPS virtual host.
+- Verified the live site renders the initials and profile signature; no changes were made to the other hosted sites.
+
 ## 2026-10-11 - 1.10.0 / server migration
 
 - Migrated `beaudette.me` and `www.beaudette.me` from `66.29.132.30` to `162.0.213.176` (`server1.philippe-tasks.net`, SSH user `philippe`). Namecheap manages the DNS; both A records now point to the new server. Nameservers and MX records were preserved.

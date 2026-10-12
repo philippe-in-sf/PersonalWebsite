@@ -16,7 +16,7 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 
 ## Version
 
-Current site version: `1.10.0` (signature and initials branding).
+Current site version: `1.11.0` (versioned brand assets and stylesheet URLs).
 
 ## Notes
 
@@ -63,3 +63,5 @@ The old `/admin/` route now points editors toward Sanity Studio instead of loadi
 `assets/brand/initials.svg` and `assets/brand/signature.svg` use Philippe’s supplied vector artwork, recolored to the site’s gold (`#d2bd8a`) without changing the paths. The initials appear in the public-page headers and homepage profile card; the full signature signs off the profile text. `assets/brand/favicon.svg` places the same initials on a navy tile and is linked from every page.
 
 The header’s `brand-name` ID belongs to the text span so CMS updates preserve the initials artwork. Keep the full name as text in the main heading for accessibility and search.
+
+Stylesheet and brand artwork URLs include a version query to prevent older cached assets from hiding design updates. Increment that query when those assets change. The new server revalidates HTML with `Cache-Control: no-cache`.
