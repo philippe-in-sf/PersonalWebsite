@@ -3,7 +3,7 @@
 ## 2026-10-11 - 1.12.0 / SVG display dimensions
 
 - Set actual display dimensions on signature and initials images so cached or unavailable CSS cannot display them at their 1,920-pixel source width.
-- Limited the profile signature to 280 pixels with a responsive maximum width; refreshed asset version queries.
+- Limited the profile signature to 180 pixels with a responsive maximum width; refreshed asset version queries.
 
 ## 2026-10-11 - 1.11.0 / cache refresh
 
