@@ -16,7 +16,7 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 
 ## Version
 
-Current site version: `1.9.0` (minor increment for the inline Sanity loader deployment).
+Current site version: `1.10.0` (signature and initials branding).
 
 ## Notes
 
@@ -51,3 +51,9 @@ The homepage document uses this shape:
 - `contact`: `sectionLabel`, `title`, `body`, `email`, `linkedinUrl`
 
 The old `/admin/` route now points editors toward Sanity Studio instead of loading Decap CMS.
+
+## Brand artwork
+
+`assets/brand/initials.svg` and `assets/brand/signature.svg` use Philippe’s supplied vector artwork, recolored to the site’s gold (`#d2bd8a`) without changing the paths. The initials appear in the public-page headers and homepage profile card; the full signature signs off the profile text. `assets/brand/favicon.svg` places the same initials on a navy tile and is linked from every page.
+
+The header’s `brand-name` ID belongs to the text span so CMS updates preserve the initials artwork. Keep the full name as text in the main heading for accessibility and search.

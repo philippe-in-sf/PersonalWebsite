@@ -69,9 +69,32 @@ a {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--serif);
   font-size: clamp(1.3rem, 2vw, 1.8rem);
   letter-spacing: 0;
+}
+
+.brand-mark {
+  display: block;
+  flex: 0 0 auto;
+  width: 58px;
+  height: auto;
+}
+
+.brand:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
+
+.profile-signature {
+  display: block;
+  width: min(100%, 280px);
+  height: auto;
+  margin-top: 28px;
 }
 
 .nav {
@@ -250,15 +273,19 @@ h3 {
 
 .monogram {
   display: grid;
-  width: 76px;
-  height: 76px;
+  width: 128px;
+  height: 128px;
   margin-bottom: 30px;
+  padding: 16px;
   place-items: center;
   border: 1px solid rgba(143, 174, 116, 0.7);
   border-radius: 50%;
-  color: var(--gold);
-  font-family: var(--serif);
-  font-size: 1.35rem;
+}
+
+.monogram img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .profile-kicker {

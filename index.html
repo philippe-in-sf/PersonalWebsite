@@ -15,9 +15,9 @@
     >
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://beaudette.me/">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2308141f'/%3E%3Cpath d='M18 45V17h15.5c6.6 0 10.8 3.4 10.8 8.7 0 3.2-1.7 5.9-4.6 7.2 3.7 1.1 5.9 4 5.9 7.8 0 5.7-4.5 9.3-11.7 9.3H18Zm7.2-16h7.2c2.8 0 4.5-1.5 4.5-3.8s-1.7-3.6-4.5-3.6h-7.2V29Zm0 15.4h8.2c3 0 4.8-1.5 4.8-4s-1.8-4-4.8-4h-8.2v8Z' fill='%23f3ecdf'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="assets/brand/favicon.svg">
     <link rel="stylesheet" href="styles.css">
-    <meta name="site-version" content="1.9.0">
+    <meta name="site-version" content="1.10.0">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M91PQ3MQFB"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -28,7 +28,10 @@
   </head>
   <body>
     <header class="site-header" id="top">
-      <a class="brand" href="#top" aria-label="Philippe Beaudette home" id="brand-name">beaudette.me</a>
+      <a class="brand" href="#top" aria-label="Philippe Beaudette home">
+        <img class="brand-mark" src="assets/brand/initials.svg" width="1920" height="744" alt="" aria-hidden="true">
+        <span id="brand-name">beaudette.me</span>
+      </a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="#profile">Profile</a>
         <a href="#experience">Experience</a>
@@ -54,7 +57,9 @@
         </div>
 
         <aside class="profile-card" aria-label="Profile summary">
-          <div class="monogram" aria-hidden="true">PB</div>
+          <div class="monogram" aria-hidden="true">
+            <img src="assets/brand/initials.svg" width="1920" height="744" alt="">
+          </div>
           <p class="profile-kicker">Focus areas</p>
           <ul>
             <li>Community strategy and governance</li>
@@ -77,6 +82,7 @@
           <p id="profile-body2">
             This site is a concise home base for background, writing, availability, and current work.
           </p>
+          <img class="profile-signature" src="assets/brand/signature.svg" width="1920" height="786" alt="Philippe Beaudette’s signature" loading="lazy">
         </article>
 
         <article class="panel">
