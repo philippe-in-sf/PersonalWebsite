@@ -22,6 +22,12 @@ Current site version: `1.10.0` (signature and initials branding).
 
 The copy intentionally uses conservative wording around public background. Replace the placeholder contact address or writing links with final destinations before publishing.
 
+## Hosting
+
+The live site runs on Apache at `philippe-tasks.net` (`162.0.213.176`) in `/var/www/beaudette.me`, with separate virtual hosts for `beaudette.me` and `www.beaudette.me`. HTTPS renews automatically through Certbot. The existing apps on this server have separate, unchanged configurations.
+
+See [the deployment audit](docs/deployment-audit.md) for migration verification, renewal checks, and rollback details. `.cpanel.yml` belongs to the previous hosting setup and does not deploy to this server.
+
 ## Calendar embed
 
 `calendar/index.html` embeds the Google Appointment Schedule URL with Google's appointment-schedule iframe path and includes a direct fallback link. The Apache redirect keeps the legacy capitalized `/Calendar/` URL pointed at `/calendar/`.
