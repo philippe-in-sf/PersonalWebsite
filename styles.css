@@ -92,7 +92,8 @@ a {
 
 .profile-signature {
   display: block;
-  width: min(100%, 280px);
+  width: 280px;
+  max-width: 100%;
   height: auto;
   margin-top: 28px;
 }

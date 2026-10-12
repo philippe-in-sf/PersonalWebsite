@@ -16,7 +16,7 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 
 ## Version
 
-Current site version: `1.11.0` (versioned brand assets and stylesheet URLs).
+Current site version: `1.12.0` (explicit display dimensions for brand artwork).
 
 ## Notes
 
