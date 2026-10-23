@@ -11,8 +11,10 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 - `.htaccess` - redirect from the legacy capitalized calendar URL
 - `styles.css` - dark navy/deep green visual system
 - `content/site.json` - checked-in fallback content
-- `content/cms.js` - hosted CMS connection settings fallback
+- `content/cms.js` - shared CMS connection, fallback loading, and URL validation
+- `app.js` - shared homepage and writing-page rendering
 - `cms/` - Sanity schema and seed content
+- `tests/` - dependency-free site regression tests
 
 ## Version
 
@@ -20,7 +22,17 @@ Current site version: `1.12.0` (explicit display dimensions for brand artwork).
 
 ## Notes
 
-The copy intentionally uses conservative wording around public background. Replace the placeholder contact address or writing links with final destinations before publishing.
+The copy intentionally uses conservative wording around public background. When no published articles are configured, the site shows an explicit empty state rather than sample links.
+
+## Testing
+
+Run the dependency-free regression suite with:
+
+```bash
+node --test
+```
+
+The same command runs for pushes and pull requests in GitHub Actions.
 
 ## Hosting
 
@@ -40,10 +52,10 @@ The site is wired for Sanity as the hosted CMS. Sanity handles editor authentica
 1. Create a Sanity project and dataset, usually `production`.
 2. Add `cms/sanity-homepage-schema.js` to the Studio schema types.
 3. Import `cms/homepage.seed.ndjson`, or create a `homepage` document with the `_id` `homepage`.
-4. Update the inline `window.SITE_CMS` block in `index.html` with the Sanity project ID and dataset. Keep `app.js` and `content/cms.js` in sync as fallback/reference files.
+4. Update the single CMS configuration in `content/cms.js` with the Sanity project ID and dataset.
 5. Add `https://beaudette.me` and local preview origins to the Sanity CORS settings.
 
-If Sanity is not configured or the request fails, the inline loader falls back to `content/site.json`.
+If Sanity is not configured or the request fails, the shared loader falls back to `content/site.json`.
 
 ## Sanity content model
 

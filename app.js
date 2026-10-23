@@ -1,65 +1,5 @@
 (function () {
-  const CMS_CONFIG = {
-    provider: 'sanity',
-    projectId: 'deoliu90',
-    dataset: 'production',
-    apiVersion: '2026-05-16',
-    documentType: 'homepage',
-    documentId: 'homepage',
-    ...(window.SITE_CMS || {}),
-  };
-
-  async function loadContent() {
-    const data = await loadSanityContent() || await loadLocalContent();
-
-    if (data) {
-      renderContent(data);
-    }
-  }
-
-  async function loadSanityContent() {
-    if (!isSanityConfigured()) {
-      return null;
-    }
-
-    const query = `*[_type == "${CMS_CONFIG.documentType}" && _id == "${CMS_CONFIG.documentId}"][0]{
-      siteName,
-      hero,
-      profile,
-      now,
-      writing,
-      "writingArticles": writing.articles,
-      contact
-    }`;
-    const url = `https://${CMS_CONFIG.projectId}.api.sanity.io/v${CMS_CONFIG.apiVersion}/data/query/${CMS_CONFIG.dataset}?query=${encodeURIComponent(query)}`;
-
-    try {
-      const response = await fetch(url, { cache: 'no-store' });
-      if (!response.ok) {
-        return null;
-      }
-
-      const data = await response.json();
-      return data.result || null;
-    } catch (error) {
-      console.error('Sanity content load failed:', error);
-      return null;
-    }
-  }
-
-  async function loadLocalContent() {
-    try {
-      const response = await fetch('content/site.json', { cache: 'no-store' });
-      if (!response.ok) {
-        return null;
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Local content load failed:', error);
-      return null;
-    }
-  }
+  const { load, webUrl, emailUrl } = window.SiteContent;
 
   function renderContent(data) {
     setText('brand-name', data.siteName);
@@ -81,22 +21,18 @@
     setText('writing-label', data.writing?.sectionLabel);
     setText('writing-title', data.writing?.title);
     setText('writing-link', data.writing?.linkText);
-    setHref('writing-link', 'writing/');
-    renderWritingPreview(data.writing?.articles || data.writingArticles || []);
+    const articles = data.writing?.articles || data.writingArticles || [];
+    renderArticles('writing-preview-list', articles, 3);
+    setText('writing-page-label', data.writing?.sectionLabel);
+    setText('writing-page-title', data.writing?.title);
+    renderArticles('writing-archive-list', articles);
 
     setText('contact-label', data.contact?.sectionLabel);
     setText('contact-title', data.contact?.title);
     setText('contact-body', data.contact?.body);
     setText('contact-email', data.contact?.email);
-    setHref('contact-email', `mailto:${data.contact?.email || ''}`);
+    setHref('contact-email', data.contact?.email, emailUrl);
     setHref('contact-linkedin', data.contact?.linkedinUrl);
-  }
-
-  function isSanityConfigured() {
-    return CMS_CONFIG.provider === 'sanity' &&
-      typeof CMS_CONFIG.projectId === 'string' &&
-      CMS_CONFIG.projectId.length > 0 &&
-      CMS_CONFIG.projectId !== 'your-project-id';
   }
 
   function setText(id, value) {
@@ -109,36 +45,38 @@
     }
   }
 
-  function setHref(id, value) {
-    if (typeof value !== 'string' || value.length === 0) {
-      return;
-    }
+  function setHref(id, value, validate = webUrl) {
+    if (value === undefined) return;
     const el = document.getElementById(id);
-    if (el) {
-      el.setAttribute('href', value);
-    }
+    if (!el) return;
+    const url = validate(value);
+    if (url) el.setAttribute('href', url);
+    else el.removeAttribute('href');
   }
 
-  function renderWritingPreview(articles) {
-    const container = document.getElementById('writing-preview-list');
-    if (!container || !Array.isArray(articles) || articles.length === 0) {
+  function renderArticles(id, articles, limit = Infinity) {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const items = Array.isArray(articles)
+      ? articles.filter((article) => article && typeof article === 'object' && !Array.isArray(article)).slice(0, limit)
+      : [];
+    if (items.length === 0) {
+      container.innerHTML = '<p class="writing-empty">No articles are listed yet. Please check back later.</p>';
       return;
     }
 
-    const topArticles = articles.slice(0, 3);
-    container.innerHTML = topArticles.map((article) => {
+    container.innerHTML = items.map((article) => {
       const title = escapeHtml(article.title || 'Untitled');
       const summary = escapeHtml(article.summary || '');
-      const publication = escapeHtml(article.publication || '');
-      const publishedOn = escapeHtml(article.publishedOn || '');
-      const url = typeof article.url === 'string' && article.url.length > 0 ? article.url : '#';
-      const meta = [publication, publishedOn].filter(Boolean).join(' · ');
+      const meta = escapeHtml([article.publication, article.publishedOn].filter(Boolean).join(' · '));
+      const url = webUrl(article.url);
+      const link = url ? `<a class="text-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Read article</a>` : '';
       return `
         <article class="writing-card">
-          <p class="writing-meta">${escapeHtml(meta)}</p>
+          <p class="writing-meta">${meta}</p>
           <h3>${title}</h3>
           <p>${summary}</p>
-          <a class="text-link" href="${escapeAttr(url)}" target="_blank" rel="noreferrer">Read article</a>
+          ${link}
         </article>
       `;
     }).join('');
@@ -153,9 +91,7 @@
       .replaceAll("'", '&#39;');
   }
 
-  function escapeAttr(value) {
-    return escapeHtml(value);
-  }
-
-  loadContent();
+  load().then((data) => {
+    if (data) renderContent(data);
+  });
 })();
