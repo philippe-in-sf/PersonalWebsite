@@ -1,1 +1,4 @@
 RedirectMatch 301 ^/Calendar/?$ /calendar/
+
+# Temporarily hide Writing, including direct requests for its index file.
+RedirectMatch 302 ^/writing(?:/index\.html|/)?$ /

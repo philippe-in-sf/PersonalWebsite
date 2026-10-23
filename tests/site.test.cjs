@@ -82,6 +82,48 @@ test('published content and scripts contain no placeholder domains', () => {
   }
 });
 
+test('public navigation does not advertise Writing', () => {
+  for (const page of publicPages) {
+    for (const [nav] of read(page).matchAll(/<nav\b[^>]*>[\s\S]*?<\/nav>/g)) {
+      assert.doesNotMatch(nav, /writing/i, page);
+    }
+  }
+});
+
+test('homepage Writing blocks stay hidden even when the CMS supplies articles', async () => {
+  const html = read('index.html');
+  for (const className of ['writing', 'writing-list-preview']) {
+    assert.match(html, new RegExp(`<section class="${className}"[^>]* hidden style="display: none;"`));
+  }
+  const instance = await render('index.html', {
+    writing: { title: 'Future writing', articles: [{ title: 'Future article', url: 'https://beaudette.me/' }] },
+  });
+  assert.match(instance.elements.get('writing-preview-list').innerHTML, /Future article/);
+  assert.equal(instance.elements.get('writing-title').textContent, 'Future writing');
+  // CMS rendering must not remove the hiding attributes or override their style.
+  assert.doesNotMatch(read('app.js'), /\.hidden\s*=|\.style\b|(?:set|remove)Attribute\(['"](?:hidden|style)['"]/);
+  assert.match(read('cms/sanity-homepage-schema.js'), /name: 'writing'/);
+  assert.match(read('cms/sanity-homepage-schema.js'), /name: 'articles'/);
+});
+
+test('Writing redirects temporarily with noindex and immediate browser fallbacks', () => {
+  const rule = read('.htaccess').match(/^RedirectMatch 302 (\S+) \/$/m);
+  assert.ok(rule, 'temporary server redirect to homepage');
+  const pattern = new RegExp(rule[1]);
+  for (const path of ['/writing', '/writing/', '/writing/index.html']) assert.ok(pattern.test(path), path);
+  for (const path of ['/', '/calendar/', '/writing-other', '/writing/indexXhtml']) assert.ok(!pattern.test(path), path);
+  const html = read('writing/index.html');
+  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  assert.match(html, /<meta http-equiv="refresh" content="0; url=\/">/);
+  const redirect = html.match(/<script>(window\.location\.replace\("\/"\);)<\/script>/);
+  assert.ok(redirect);
+  const destinations = [];
+  vm.runInNewContext(redirect[1], { window: { location: { replace: (url) => destinations.push(url) } } });
+  assert.deepEqual(destinations, ['/']);
+  assert.match(html, /<main hidden style="display: none;">/);
+  assert.match(html, /<a href="\/">Continue to homepage<\/a>/);
+});
+
 test('local HTML asset and navigation references resolve', () => {
   for (const page of publicPages) {
     for (const [, value] of read(page).matchAll(/\b(?:src|href)="([^"]+)"/g)) {
@@ -114,7 +156,7 @@ test('content pages retain language, title, description, canonical, social and v
   const version = read('index.html').match(/name="site-version" content="([^"]+)"/)[1];
   for (const page of pages) {
     const html = read(page);
-    const canonical = `https://beaudette.me/${page === 'index.html' ? '' : 'writing/'}`;
+    const canonical = 'https://beaudette.me/';
     assert.match(html, /<html lang="en">/);
     assert.match(html, /<title>[^<]+<\/title>/);
     assert.match(html, /name="description"\s+content="[^"]+"/);
