@@ -8,13 +8,14 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 
 - `index.html` - single-page executive profile
 - `calendar/index.html` - matching page for an embedded Google Calendar appointment schedule
-- `.htaccess` - redirect from the legacy capitalized calendar URL
+- `.htaccess` - redirects plus browser security headers (HSTS, CSP, etc.)
 - `styles.css` - dark navy/deep green visual system
 - `content/site.json` - checked-in fallback content
 - `content/cms.js` - shared CMS connection, fallback loading, and URL validation
 - `app.js` - shared homepage and writing-page rendering
-- `cms/` - Sanity schema and seed content
+- `cms/` - Sanity schema and seed content (not deployed to the public web root)
 - `tests/` - dependency-free site regression tests
+- `docs/security-hardening.md` - deploy allow-list and Apache hardening guidance
 
 ## Version
 
@@ -36,9 +37,11 @@ The same command runs for pushes and pull requests in GitHub Actions.
 
 ## Hosting
 
-The live site runs on Apache at `philippe-tasks.net` (`162.0.213.176`) in `/var/www/beaudette.me`, with separate virtual hosts for `beaudette.me` and `www.beaudette.me`. HTTPS renews automatically through Certbot. The existing apps on this server have separate, unchanged configurations.
+The live site is static files on Apache with separate HTTPS virtual hosts for `beaudette.me` and `www.beaudette.me`. TLS renews automatically via Let's Encrypt. Deploy **public site files only**; keep Git metadata, tests, CMS studio sources, and ops docs out of the web root.
 
-See [the deployment audit](docs/deployment-audit.md) for migration verification, renewal checks, and rollback details. `.cpanel.yml` belongs to the previous hosting setup and does not deploy to this server.
+Hostnames, IPs, SSH users, and absolute server paths are intentionally omitted from this public repository—keep them in a private runbook.
+
+See [the deployment audit](docs/deployment-audit.md) for release history and [security hardening](docs/security-hardening.md) for headers, CSP, and deploy allow-list guidance. The legacy cPanel deploy file (`.cpanel.yml`) has been removed.
 
 ## Calendar embed
 
@@ -47,13 +50,13 @@ See [the deployment audit](docs/deployment-audit.md) for migration verification,
 
 ## CMS editing workflow
 
-The site is wired for Sanity as the hosted CMS. Sanity handles editor authentication, including Google login if enabled for the Sanity organization/project. The public site stays static and reads content from Sanity's Content Lake.
+The site is wired for Sanity as the hosted CMS. Sanity handles editor authentication, including Google login if enabled for the Sanity organization/project. The public site stays static and reads content from Sanity's Content Lake. Treat Sanity **write** access as the primary trust boundary: enable org MFA, least-privilege roles, and never commit write tokens.
 
 1. Create a Sanity project and dataset, usually `production`.
 2. Add `cms/sanity-homepage-schema.js` to the Studio schema types.
 3. Import `cms/homepage.seed.ndjson`, or create a `homepage` document with the `_id` `homepage`.
 4. Update the single CMS configuration in `content/cms.js` with the Sanity project ID and dataset.
-5. Add `https://beaudette.me` and local preview origins to the Sanity CORS settings.
+5. Restrict Sanity CORS to `https://beaudette.me`, `https://www.beaudette.me`, and only the local preview origins you use.
 
 If Sanity is not configured or the request fails, the shared loader falls back to `content/site.json`.
 

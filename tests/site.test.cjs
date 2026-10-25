@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { readFileSync, readdirSync, statSync } = require('node:fs');
+const { readFileSync, readdirSync, statSync, existsSync } = require('node:fs');
 const { resolve, dirname, relative } = require('node:path');
 const { execFileSync } = require('node:child_process');
 const vm = require('node:vm');
@@ -122,6 +122,37 @@ test('Writing redirects temporarily with noindex and immediate browser fallbacks
   assert.deepEqual(destinations, ['/']);
   assert.match(html, /<main hidden style="display: none;">/);
   assert.match(html, /<a href="\/">Continue to homepage<\/a>/);
+});
+
+test('htaccess ships security headers, indexing off, and sensitive-path denials', () => {
+  const htaccess = read('.htaccess');
+  assert.match(htaccess, /^Options -Indexes$/m);
+  for (const header of [
+    'Strict-Transport-Security',
+    'X-Content-Type-Options',
+    'X-Frame-Options',
+    'Referrer-Policy',
+    'Permissions-Policy',
+    'Content-Security-Policy',
+  ]) {
+    assert.match(htaccess, new RegExp(`Header always set ${header} `));
+  }
+  assert.match(htaccess, /frame-src https:\/\/calendar\.google\.com/);
+  assert.match(htaccess, /connect-src[^;]*https:\/\/\*\.api\.sanity\.io/);
+  assert.ok(htaccess.split(/\n/).some((line) => line.startsWith('RedirectMatch 404') && line.includes('.git')));
+  assert.ok(htaccess.split(/\n/).some((line) => line.includes('docs|tests|cms')));
+  assert.equal(existsSync(resolve(root, '.cpanel.yml')), false);
+});
+
+test('public docs omit infrastructure identifiers and calendar embed hardens referrer', () => {
+  const leakage = /\b(?:\d{1,3}(?:\.\d{1,3}){3}|philippe-tasks\.net|server1\.|\/var\/www\/|\/home\/|beauyqoz|letsencrypt\/live|ssh\s+\w+@)/i;
+  for (const path of ['README.md', 'docs/deployment-audit.md', 'docs/security-hardening.md']) {
+    assert.doesNotMatch(read(path), leakage, path);
+  }
+  assert.doesNotMatch(read('docs/security-hardening.md'), /USER@HOST:\/var\/www/);
+  const calendar = read('calendar/index.html');
+  assert.match(calendar, /<iframe\b[\s\S]*\breferrerpolicy="strict-origin-when-cross-origin"/);
+  assert.match(calendar, /<iframe\b[\s\S]*\ballow="clipboard-write"/);
 });
 
 test('local HTML asset and navigation references resolve', () => {

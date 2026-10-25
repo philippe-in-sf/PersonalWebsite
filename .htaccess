@@ -1,4 +1,33 @@
+# URL redirects
 RedirectMatch 301 ^/Calendar/?$ /calendar/
 
 # Temporarily hide Writing, including direct requests for its index file.
 RedirectMatch 302 ^/writing(?:/index\.html|/)?$ /
+
+# Hardening: do not advertise directory listings
+Options -Indexes
+
+# Deny common sensitive paths if they are ever deployed into the docroot
+RedirectMatch 404 /\.git
+RedirectMatch 404 (?i)/\.(?:env|ssh|htpasswd)(?:$|/)
+RedirectMatch 404 (?i)^/(?:docs|tests|cms|\.github)(?:/|$)
+RedirectMatch 404 (?i)^/(?:README\.md|LICENSE|\.gitignore|\.cpanel\.yml)$
+
+# Browser security headers (requires mod_headers)
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+  # CSP: self + Sanity reads + GA + Google Calendar embed. 'unsafe-inline' covers the small gtag bootstrap and admin page styles.
+  Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.api.sanity.io https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-src https://calendar.google.com https://calendar.app.google; upgrade-insecure-requests"
+  Header always unset X-Powered-By
+</IfModule>
+
+# HTML should revalidate so releases show up promptly
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html?)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
