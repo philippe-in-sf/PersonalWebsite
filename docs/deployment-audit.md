@@ -7,8 +7,11 @@ Operational notes for `beaudette.me`. **Do not publish hostnames, IP addresses, 
 - Redacted infrastructure identifiers from public docs after a security review.
 - Added browser security headers and a Content-Security-Policy in `.htaccess`.
 - Retired the legacy cPanel full-tree rsync deploy config (`.cpanel.yml` removed).
-- Documented Apache vhost hardening in `docs/security-hardening.md`.
+- Documented the full hardening and deploy process in `docs/security-hardening.md`.
 - Tightened the calendar iframe referrer policy.
+- Merged via PR #12; deployed public allow-list files only to production.
+- Production HTTPS vhost enforces headers/CSP/path denials (`AllowOverride None`); `ServerTokens Prod`.
+- Post-deploy verification: homepage/calendar `200`, security headers present, sensitive paths `404`, writing/calendar redirects intact, Sanity public read OK.
 
 ## 2026-10-11 - 1.12.0 / SVG display dimensions
 

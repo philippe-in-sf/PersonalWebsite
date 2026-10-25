@@ -15,7 +15,7 @@ Open `index.html` directly in a browser to preview. The site is plain HTML and C
 - `app.js` - shared homepage and writing-page rendering
 - `cms/` - Sanity schema and seed content (not deployed to the public web root)
 - `tests/` - dependency-free site regression tests
-- `docs/security-hardening.md` - deploy allow-list and Apache hardening guidance
+- `docs/security-hardening.md` - full security hardening, deploy, verify, and rollback process
 
 ## Version
 
